@@ -21,7 +21,7 @@ def rotate(v, angle):
                     
 alpha = pi/12                    
                     
-def rec(p):
+def koch(p):
     point_list = []
     
     t = rotate(rot(p), pi/2)
@@ -33,25 +33,39 @@ def rec(p):
     point_list.append(point(loc(p) + t/2, rotate(rot(p), pi/3)/3))
     t = rotate(rot(p), -pi/6)
     point_list.append(point(loc(p) + t/2, rotate(rot(p), -pi/3)/3))
-    
+        
+    return point_list
+
+def serpinsky(p):
+    point_list = []
+
+    t = rot(p)/2
+    point_list.append(point(loc(p) + t, t))
+    t2 = rotate(rot(p), 2*pi/3)/2
+    point_list.append(point(loc(p) + t2, t))
+    t2 = rotate(rot(p), -2*pi/3)/2
+    point_list.append(point(loc(p) + t2, t))
     
     return point_list
 
 
+
+n_iterations = 10
 img_size = 400
-    
-vec_list = [point([img_size//2, img_size//2], [0, -100])]
+img = np.zeros((img_size,img_size,3), np.float32)
 
-img = np.zeros((img_size,img_size), np.float32)
-
-n_iterations = 8
+#this function defines the fractal shape
+rec_function = serpinsky
+#initial list of points
+vec_list = [point([img_size//2, 2*img_size//3], [0, -200])]
 
 for i in range(n_iterations):
     upd_list = []
     #print([x.astype(np.int) for x in vec_list])
     for v in vec_list:
-        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = (i+1)/n_iterations
-        upd_list.extend(np.array(rec(v)))
+        stage = (i+1)/n_iterations
+        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = [0,stage,stage]
+        upd_list.extend(np.array(rec_function(v)))
     vec_list = upd_list
     
 import matplotlib.pyplot as plt
