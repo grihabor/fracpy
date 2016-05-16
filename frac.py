@@ -51,7 +51,7 @@ def serpinsky(p):
 def dragon(p):
     point_list = []
     
-    k = .7
+    k = sqrt(2)/2
     t1 = rotate(rot(p), -pi/4)*k
     t2 = rotate(rot(p), -3*pi/4)*k
     point_list.append(point(loc(p) - t1, t1))
@@ -60,14 +60,14 @@ def dragon(p):
     return point_list
 
 
-n_iterations = 17
-img_size = 700
+n_iterations = 16
+img_size = 500
 img = np.zeros((img_size,img_size,3), np.float32)
 
 #this function defines the fractal shape
 rec_function = dragon
 #initial list of points
-vec_list = [point([img_size//2, img_size//2], [0, -200])]
+vec_list = [point([img_size//2, img_size//2], [0, -120])]
 
 for i in range(n_iterations):
     upd_list = []
@@ -82,7 +82,14 @@ for i in range(n_iterations):
             k = 1
             stage = j/(len(vec_list)-1)
         
-        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = k*np.array([1.,1.-stage,0.])
+        
+        if stage < .5:
+            color = [1., 2*stage, 0.]
+        else:
+            color = [2 - 2*stage, 1., 0.]
+        
+        
+        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = k*np.array(color)
         upd_list.extend(np.array(rec_function(v)))
     vec_list = upd_list
     
