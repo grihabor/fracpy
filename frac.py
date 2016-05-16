@@ -3,7 +3,7 @@ from math import *
 
 '''
 one point is represented by location and rotation vectors
-[[1, 1], [-1, 0]]
+[[loc_x, loc_y], [rot_x, rot_y]]
 '''
 
 def point(loc, rot):
@@ -48,23 +48,41 @@ def serpinsky(p):
     
     return point_list
 
+def dragon(p):
+    point_list = []
+    
+    k = .7
+    t1 = rotate(rot(p), -pi/4)*k
+    t2 = rotate(rot(p), -3*pi/4)*k
+    point_list.append(point(loc(p) - t1, t1))
+    point_list.append(point(loc(p) + t2, t2))
+        
+    return point_list
 
 
-n_iterations = 10
-img_size = 400
+n_iterations = 17
+img_size = 700
 img = np.zeros((img_size,img_size,3), np.float32)
 
 #this function defines the fractal shape
-rec_function = serpinsky
+rec_function = dragon
 #initial list of points
-vec_list = [point([img_size//2, 2*img_size//3], [0, -200])]
+vec_list = [point([img_size//2, img_size//2], [0, -200])]
 
 for i in range(n_iterations):
     upd_list = []
-    #print([x.astype(np.int) for x in vec_list])
-    for v in vec_list:
-        stage = (i+1)/n_iterations
-        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = [0,stage,stage]
+    print([x.astype(np.int) for x in vec_list])
+    print('it', i)
+    for j, v in enumerate(vec_list):
+        #stage = (i+1)/n_iterations
+        stage = 1
+        if i != n_iterations - 1:
+            k = 0
+        else:
+            k = 1
+            stage = j/(len(vec_list)-1)
+        
+        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = k*np.array([1.,1.-stage,0.])
         upd_list.extend(np.array(rec_function(v)))
     vec_list = upd_list
     
