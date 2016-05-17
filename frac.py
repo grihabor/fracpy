@@ -1,6 +1,8 @@
 import numpy as np
 from math import *
 
+SAVE_TO_FILE = True
+
 '''
 one point is represented by location and rotation vectors
 [[loc_x, loc_y], [rot_x, rot_y]]
@@ -93,7 +95,14 @@ for i in range(n_iterations):
         upd_list.extend(np.array(rec_function(v)))
     vec_list = upd_list
     
-import matplotlib.pyplot as plt
+if SAVE_TO_FILE:
+    from skimage.io import imsave
 
-plt.imshow(img, cmap='gray', interpolation='None')
-plt.show()
+    imsave("frac.png", img)
+
+else:
+    import matplotlib.pyplot as plt
+
+    plt.imshow(img, cmap='gray', interpolation='None')
+    plt.show()
+
