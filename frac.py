@@ -1,8 +1,6 @@
 import numpy as np
 from math import *
 
-SAVE_TO_FILE = True
-
 '''
 one point is represented by location and rotation vectors
 [[loc_x, loc_y], [rot_x, rot_y]]
@@ -20,8 +18,7 @@ def rotate(v, angle):
     return np.array([v[0] * cos(angle) + v[1] * sin(angle),
                     -v[0] * sin(angle) + v[1] * cos(angle)])
 
-                    
-alpha = pi/12                    
+                              
                     
 def koch(p):
     point_list = []
@@ -50,59 +47,53 @@ def serpinsky(p):
     
     return point_list
 
-def dragon(p):
-    point_list = []
-    
+def dragon(p):    
     k = sqrt(2)/2
     t1 = rotate(rot(p), -pi/4)*k
     t2 = rotate(rot(p), -3*pi/4)*k
-    point_list.append(point(loc(p) - t1, t1))
-    point_list.append(point(loc(p) + t2, t2))
-        
-    return point_list
+    yield point(loc(p) - t1, t1)
+    yield point(loc(p) + t2, t2)
+    raise StopIteration
 
-
-n_iterations = 16
-img_size = 500
-img = np.zeros((img_size,img_size,3), np.float32)
-
-#this function defines the fractal shape
-rec_function = dragon
-#initial list of points
-vec_list = [point([img_size//2, img_size//2], [0, -120])]
-
-for i in range(n_iterations):
-    upd_list = []
-    print([x.astype(np.int) for x in vec_list])
-    print('it', i)
-    for j, v in enumerate(vec_list):
-        #stage = (i+1)/n_iterations
-        stage = 1
-        if i != n_iterations - 1:
-            k = 0
-        else:
-            k = 1
-            stage = j/(len(vec_list)-1)
-        
-        
-        if stage < .5:
-            color = [1., 2*stage, 0.]
-        else:
-            color = [2 - 2*stage, 1., 0.]
-        
-        
-        img[int(loc(v)[1]+.5), int(loc(v)[0]+.5)] = k*np.array(color)
-        upd_list.extend(np.array(rec_function(v)))
-    vec_list = upd_list
+def calculate(rec_function, img_size, n_iterations):
     
-if SAVE_TO_FILE:
-    from skimage.io import imsave
-
-    imsave("frac.png", img)
-
-else:
-    import matplotlib.pyplot as plt
-
-    plt.imshow(img, cmap='gray', interpolation='None')
-    plt.show()
-
+    #starting point
+    init=point([img_size//2, img_size//2], [0, -120])
+    
+    img = np.zeros((img_size,img_size,3), np.float32)
+    
+    #list of iterators
+    it_list = [None]*n_iterations
+    
+    #flag if we need a new generator
+    add_gen = True
+    p = init
+    i = 0
+    while i >= 0:
+        if add_gen:
+            it_list[i] = iter(rec_function(p))
+        add_gen = True
+        
+        try:
+            p = next(it_list[i])
+        except StopIteration:
+            i -= 1
+            add_gen = False
+            continue
+            
+        if i == n_iterations - 1:
+            '''
+            if stage < .5:
+                color = [1., 2*stage, 0.]
+            else:
+                color = [2 - 2*stage, 1., 0.]
+            '''
+            color = [1., 0., 0.]
+            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color)
+            add_gen = False
+            i -= 1
+        else:
+            i += 1
+    
+    return img    
+        
