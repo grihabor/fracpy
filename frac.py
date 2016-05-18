@@ -57,7 +57,7 @@ def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None
     #starting point
     init=point(init_loc, init_rot)
     
-    img = np.zeros((img_size,img_size,3), np.float32)
+    img = np.zeros((img_size,img_size,3), np.uint8)
     
     #list of iterators
     it_list = [None]*n_iterations
@@ -85,7 +85,7 @@ def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None
             else:
                 color = [2 - 2*stage, 1., 0.]
             '''
-            color = [1., 0., 0.]
+            color = [255, 0, 0]
             img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color)
             add_gen = False
             i -= 1
