@@ -17,35 +17,28 @@ def rot(p):
 def rotate(v, angle):
     return np.array([v[0] * cos(angle) + v[1] * sin(angle),
                     -v[0] * sin(angle) + v[1] * cos(angle)])
-
-                              
+                            
                     
-def koch(p):
-    point_list = []
-    
+def koch_curve(p):
     t = rotate(rot(p), pi/2)
-    point_list.append(point(loc(p) + t, rot(p)/3))
+    yield point(loc(p) + t, rot(p)/3)
     t = rotate(rot(p), -pi/2)
-    point_list.append(point(loc(p) + t, rot(p)/3))
+    yield point(loc(p) + t, rot(p)/3)
     
     t = rotate(rot(p), pi/6)
-    point_list.append(point(loc(p) + t/2, rotate(rot(p), pi/3)/3))
+    yield point(loc(p) + t/2, rotate(rot(p), pi/3)/3)
     t = rotate(rot(p), -pi/6)
-    point_list.append(point(loc(p) + t/2, rotate(rot(p), -pi/3)/3))
-        
-    return point_list
-
-def serpinsky(p):
-    point_list = []
-
-    t = rot(p)/2
-    point_list.append(point(loc(p) + t, t))
-    t2 = rotate(rot(p), 2*pi/3)/2
-    point_list.append(point(loc(p) + t2, t))
-    t2 = rotate(rot(p), -2*pi/3)/2
-    point_list.append(point(loc(p) + t2, t))
+    yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
+    raise StopIteration
     
-    return point_list
+def serpinsky(p):
+    t = rot(p)/2
+    yield point(loc(p) + t, t)
+    t2 = rotate(rot(p), 2*pi/3)/2
+    yield point(loc(p) + t2, t)
+    t2 = rotate(rot(p), -2*pi/3)/2
+    yield point(loc(p) + t2, t)
+    raise StopIteration
 
 def dragon(p):    
     k = sqrt(2)/2
@@ -54,11 +47,15 @@ def dragon(p):
     yield point(loc(p) - t1, t1)
     yield point(loc(p) + t2, t2)
     raise StopIteration
-
-def calculate(rec_function, img_size, n_iterations):
     
+def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None):
+    
+    if init_loc is None:
+        init_loc = [img_size//2, img_size//2]
+    if init_rot is None:
+        init_rot = [0, -100]
     #starting point
-    init=point([img_size//2, img_size//2], [0, -120])
+    init=point(init_loc, init_rot)
     
     img = np.zeros((img_size,img_size,3), np.float32)
     
