@@ -48,7 +48,23 @@ def dragon(p):
     yield point(loc(p) + t2, t2)
     raise StopIteration
     
-def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None):
+def levy_curve(p):
+    k = sqrt(2)/2
+    t1 = rotate(rot(p), pi/4)*k
+    t2 = rotate(rot(p), -pi/4)*k
+    yield point(loc(p) + t1, t1)
+    yield point(loc(p) + t2, t2)
+    raise StopIteration
+
+
+def calculate(rec_function, img_size, n_iterations, color, init_loc=None, init_rot=None):
+    '''
+    rec_function    - point generator
+    img_size        - output image size
+    n_iterations    - number of point iterations
+    color           - function, which takes point number from (0, N**n_iterations)
+                        where N - generator number of points
+    '''
     
     if init_loc is None:
         init_loc = [img_size//2, img_size//2]
@@ -66,6 +82,7 @@ def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None
     add_gen = True
     p = init
     i = 0
+    j = 0
     while i >= 0:
         if add_gen:
             it_list[i] = iter(rec_function(p))
@@ -79,14 +96,8 @@ def calculate(rec_function, img_size, n_iterations, init_loc=None, init_rot=None
             continue
             
         if i == n_iterations - 1:
-            '''
-            if stage < .5:
-                color = [1., 2*stage, 0.]
-            else:
-                color = [2 - 2*stage, 1., 0.]
-            '''
-            color = [255, 0, 0]
-            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color)
+            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color(j))
+            j += 1
             add_gen = False
             i -= 1
         else:
