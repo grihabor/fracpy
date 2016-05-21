@@ -31,13 +31,25 @@ def koch_curve(p):
     yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
     raise StopIteration
     
-def serpinsky(p):
+def serpinsky_triangle(p):
     t = rot(p)/2
     yield point(loc(p) + t, t)
-    t2 = rotate(rot(p), 2*pi/3)/2
-    yield point(loc(p) + t2, t)
-    t2 = rotate(rot(p), -2*pi/3)/2
-    yield point(loc(p) + t2, t)
+    t = rotate(rot(p), 2*pi/3)/2
+    yield point(loc(p) + t, t)
+    t = rotate(rot(p), -2*pi/3)/2
+    yield point(loc(p) + t, t)
+    raise StopIteration
+
+def serpinsky_carpet(p):
+    new_rot = rot(p)/3
+    t = new_rot
+    t2 = rotate(new_rot*sqrt(2), pi/4)
+    for i in range(4):
+        yield point(loc(p) + t, new_rot)
+        t = rotate(t, pi/2)
+        yield point(loc(p) + t2, new_rot)
+        t2 = rotate(t2, pi/2)
+
     raise StopIteration
 
 def dragon(p):    
