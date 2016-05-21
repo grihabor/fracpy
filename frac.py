@@ -31,7 +31,7 @@ def koch_curve(p):
     yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
     raise StopIteration
     
-def serpinsky_triangle(p):
+def sierpinski_triangle(p):
     t = rot(p)/2
     yield point(loc(p) + t, t)
     t = rotate(rot(p), 2*pi/3)/2
@@ -40,7 +40,7 @@ def serpinsky_triangle(p):
     yield point(loc(p) + t, t)
     raise StopIteration
 
-def serpinsky_carpet(p):
+def sierpinski_carpet(p):
     new_rot = rot(p)/3
     t = new_rot
     t2 = rotate(new_rot*sqrt(2), pi/4)
