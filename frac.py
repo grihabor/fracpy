@@ -59,27 +59,28 @@ def dragon(p):
     yield point(loc(p) - t1, t1)
     yield point(loc(p) + t2, t2)
     raise StopIteration
-'''
-class levy:
-    __init__(self, alpha):
-        self.alpha = pi/3.1
+
+
+
+
+class levy_curve:
+    def __init__(self, alpha, num):
+        self.alpha = alpha
+        self.num = num
         return
-'''
-alpha = pi/3.5
-def levy_curve(p):
-    #print(loc(p))
-    k = .5/cos(alpha)
-    new_rot = rotate(rot(p), alpha)*k
-    t = loc(p) + rot(p)*tan(alpha)/2  
-    yield point(t + rotate(rot(p), pi/2)/2, new_rot)
-    new_rot = rotate(rot(p), -alpha)*k
-    t = loc(p) + rot(p)*tan(alpha)/2  
-    yield point(t - rotate(rot(p), pi/2)/2, new_rot)
-    
-    raise StopIteration
+        
+    def get(self, p):
+        beta = self.alpha/2
+        k = 2*tan(beta)
+        h = rotate(rot(p), -pi/2 + beta) * cos(beta)/2
+        for i in range(self.num):
+            yield point(loc(p) + h, h*k)
+            h = rotate(h, self.alpha)
+            
+        raise StopIteration
 
 
-def calculate(rec_function, img_size, n_iterations, color, gamma=100, alpha=0, init_loc=None, init_rot=None):
+def calculate(obj, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
     '''
     rec_function    - point generator
     img_size        - output image size
@@ -87,11 +88,11 @@ def calculate(rec_function, img_size, n_iterations, color, gamma=100, alpha=0, i
     color           - function, which takes point number from (0, N**n_iterations)
                         where N - generator number of points
     '''
-    
+    rec_function = obj.get
     if init_loc is None:
         init_loc = [img_size//2, img_size//2]
     if init_rot is None:
-        init_rot = rotate([0, -gamma], alpha)
+        init_rot = rotate([0, -size], alpha)
     
 
     #starting point

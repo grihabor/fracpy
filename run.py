@@ -4,7 +4,7 @@ def white(j):
     return [255, 255, 255]
 
 def color_lin(j):
-    j //= 100
+    j //= 800
     a = j % 511
     b = 510 - a
     y = min(a, b)
@@ -22,18 +22,27 @@ img_size = 500
 
 #img = calculate(sierpinski_carpet, 800, 7, color_lin, init_rot=[0, -3**6])
 
-img = calculate(levy_curve, img_size, 18, color_lin, gamma=img_size/12)
+n = 1000
+begin = 375
+end = 415
+for i in range(begin, end):
+    
+    t = i/(n-1)
+    alpha = t * 2*pi + (1-t) * 0
+    
+    curve = levy_curve(alpha, 2)
+    img = calculate(curve, img_size, 20, color_lin, size=img_size/3.3)
+    print('iteration', i)
+    SAVE_TO_FILE = True
 
-SAVE_TO_FILE = True
+    if SAVE_TO_FILE:
+        from skimage.io import imsave
 
-if SAVE_TO_FILE:
-    from skimage.io import imsave
+        imsave("frames/{}.png".format(i), img)
 
-    imsave("frac.png", img)
+    else:
+        import matplotlib.pyplot as plt
 
-else:
-    import matplotlib.pyplot as plt
-
-    plt.imshow(img, interpolation='None')
-    plt.show()
+        plt.imshow(img, interpolation='None')
+        plt.show()
 
