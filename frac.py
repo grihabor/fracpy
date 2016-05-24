@@ -18,47 +18,51 @@ def rotate(v, angle):
     return np.array([v[0] * cos(angle) + v[1] * sin(angle),
                     -v[0] * sin(angle) + v[1] * cos(angle)])
                             
-                    
-def koch_curve(p):
-    t = rotate(rot(p), pi/2)
-    yield point(loc(p) + t, rot(p)/3)
-    t = rotate(rot(p), -pi/2)
-    yield point(loc(p) + t, rot(p)/3)
+
+class koch_curve:                    
+    def get(p):
+        t = rotate(rot(p), pi/2)
+        yield point(loc(p) + t, rot(p)/3)
+        t = rotate(rot(p), -pi/2)
+        yield point(loc(p) + t, rot(p)/3)
+        
+        t = rotate(rot(p), pi/6)
+        yield point(loc(p) + t/2, rotate(rot(p), pi/3)/3)
+        t = rotate(rot(p), -pi/6)
+        yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
+        raise StopIteration
     
-    t = rotate(rot(p), pi/6)
-    yield point(loc(p) + t/2, rotate(rot(p), pi/3)/3)
-    t = rotate(rot(p), -pi/6)
-    yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
-    raise StopIteration
-    
-def sierpinski_triangle(p):
-    t = rot(p)/2
-    yield point(loc(p) + t, t)
-    t = rotate(rot(p), 2*pi/3)/2
-    yield point(loc(p) + t, t)
-    t = rotate(rot(p), -2*pi/3)/2
-    yield point(loc(p) + t, t)
-    raise StopIteration
+class sierpinski_triangle:
+    def get(p):
+        t = rot(p)/2
+        yield point(loc(p) + t, t)
+        t = rotate(rot(p), 2*pi/3)/2
+        yield point(loc(p) + t, t)
+        t = rotate(rot(p), -2*pi/3)/2
+        yield point(loc(p) + t, t)
+        raise StopIteration
 
-def sierpinski_carpet(p):
-    new_rot = rot(p)/3
-    t = new_rot
-    t2 = rotate(new_rot*sqrt(2), pi/4)
-    for i in range(4):
-        yield point(loc(p) + t, new_rot)
-        t = rotate(t, pi/2)
-        yield point(loc(p) + t2, new_rot)
-        t2 = rotate(t2, pi/2)
+class sierpinski_carpet:
+    def get(p):
+        new_rot = rot(p)/3
+        t = new_rot
+        t2 = rotate(new_rot*sqrt(2), pi/4)
+        for i in range(4):
+            yield point(loc(p) + t, new_rot)
+            t = rotate(t, pi/2)
+            yield point(loc(p) + t2, new_rot)
+            t2 = rotate(t2, pi/2)
 
-    raise StopIteration
+        raise StopIteration
 
-def dragon(p):    
-    k = sqrt(2)/2
-    t1 = rotate(rot(p), -pi/4)*k
-    t2 = rotate(rot(p), -3*pi/4)*k
-    yield point(loc(p) - t1, t1)
-    yield point(loc(p) + t2, t2)
-    raise StopIteration
+class dragon:
+    def get(p):    
+        k = sqrt(2)/2
+        t1 = rotate(rot(p), -pi/4)*k
+        t2 = rotate(rot(p), -3*pi/4)*k
+        yield point(loc(p) - t1, t1)
+        yield point(loc(p) + t2, t2)
+        raise StopIteration
 
 
 
