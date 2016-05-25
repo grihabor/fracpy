@@ -20,30 +20,29 @@ def rotate(v, angle):
                             
 
 class koch_curve:                    
-    def get(p):
+    def __call__(self, p):
         t = rotate(rot(p), pi/2)
         yield point(loc(p) + t, rot(p)/3)
-        t = rotate(rot(p), -pi/2)
-        yield point(loc(p) + t, rot(p)/3)
-        
         t = rotate(rot(p), pi/6)
         yield point(loc(p) + t/2, rotate(rot(p), pi/3)/3)
         t = rotate(rot(p), -pi/6)
         yield point(loc(p) + t/2, rotate(rot(p), -pi/3)/3)
+        t = rotate(rot(p), -pi/2)
+        yield point(loc(p) + t, rot(p)/3)        
         raise StopIteration
     
 class sierpinski_triangle:
-    def get(p):
-        t = rot(p)/2
-        yield point(loc(p) + t, t)
-        t = rotate(rot(p), 2*pi/3)/2
-        yield point(loc(p) + t, t)
-        t = rotate(rot(p), -2*pi/3)/2
-        yield point(loc(p) + t, t)
+    def __call__(self, p):
+        v1 = rot(p)/2
+        v2 = rotate(v1, 2*pi/3)
+        v3 = rotate(v1, -2*pi/3)
+        yield point(loc(p) + v1, v3)
+        yield point(loc(p) + v2, v1)
+        yield point(loc(p) + v3, v2)
         raise StopIteration
 
 class sierpinski_carpet:
-    def get(p):
+    def __call__(self, p):
         new_rot = rot(p)/3
         t = new_rot
         t2 = rotate(new_rot*sqrt(2), pi/4)
@@ -56,7 +55,7 @@ class sierpinski_carpet:
         raise StopIteration
 
 class dragon:
-    def get(p):    
+    def __call__(self, p):    
         k = sqrt(2)/2
         t1 = rotate(rot(p), -pi/4)*k
         t2 = rotate(rot(p), -3*pi/4)*k
@@ -73,7 +72,7 @@ class levy_curve:
         self.num = num
         return
         
-    def get(self, p):
+    def __call__(self, p):
         beta = self.alpha/2
         k = 2*tan(beta)
         h = rotate(rot(p), -pi/2 + beta) * cos(beta)/2
@@ -84,25 +83,27 @@ class levy_curve:
         raise StopIteration
 
 
-def calculate(obj, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
+def calculate(gen_func, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
     '''
-    rec_function    - point generator
+    gen_func        - point generator
     img_size        - output image size
-    n_iterations    - number of point iterations
+    n_iterations    - number of iterations
     color           - function, which takes point number from (0, N**n_iterations)
                         where N - generator number of points
     '''
-    rec_function = obj.get
+        
+
     if init_loc is None:
         init_loc = [img_size//2, img_size//2]
     if init_rot is None:
         init_rot = rotate([0, -size], alpha)
     
-
     #starting point
     init=point(init_loc, init_rot)
+    #total number of points
+    total = sum(1 for i in gen_func(init)) ** n_iterations
     
-    img = np.zeros((img_size,img_size,3), np.uint8)
+    img = np.zeros((img_size,img_size,3), np.float)
     
     #list of iterators
     it_list = [None]*n_iterations
@@ -111,10 +112,10 @@ def calculate(obj, img_size, n_iterations, color, size=100, alpha=0, init_loc=No
     add_gen = True
     p = init
     i = 0
-    j = 0
+    count = 0
     while i >= 0:
         if add_gen:
-            it_list[i] = iter(rec_function(p))
+            it_list[i] = iter(gen_func(p))
         add_gen = True
         
         try:
@@ -129,11 +130,11 @@ def calculate(obj, img_size, n_iterations, color, size=100, alpha=0, init_loc=No
         '''
     
         if i == n_iterations - 1:
-            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color(j))
-            j += 1
+            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color(count/total))
+            count += 1
             add_gen = False
         else:
             i += 1
-    
+    #print(n_iterations, count, total)
     return img    
         
