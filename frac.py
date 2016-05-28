@@ -63,8 +63,26 @@ class dragon:
         yield point(loc(p) + t2, t2)
         raise StopIteration
 
+def peano_curve(p):    
+    t1 = rot(p)/2
+    t2 = rotate(t1, pi/2)
+    yield point(loc(p)-t1-t2, -t2)
+    yield point(loc(p)+t1-t2, t1)
+    yield point(loc(p)+t1+t2, t1)
+    yield point(loc(p)-t1+t2, t2)
+    raise StopIteration
 
-
+def minkowski_curve(p):
+    t1 = rot(p)/2
+    t2 = rotate(t1, pi/2)
+    yield point(loc(p) + 3*t2, t1/2)
+    yield point(loc(p) + 2*t2 + t1, t2/2)
+    yield point(loc(p) + t2 + 2*t1, t1/2)
+    yield point(loc(p) + t1, -t2/2)
+    yield point(loc(p) - t1, -t2/2)
+    yield point(loc(p) - t2 - 2*t1, t1/2)
+    yield point(loc(p) - 2*t2 - t1, t2/2)
+    yield point(loc(p) - 3*t2, t1/2)
 
 class levy_curve:
     def __init__(self, alpha, num):

@@ -8,8 +8,11 @@ def green(x):
 def color_lin(x):
     return [x, 0, 1-x]
     
+def color_sin_small(x):
+    return [sin(x*pi*512)**2, 0, cos(x*pi*512)**2]
+
 def color_sin(x):
-    return [sin(x*pi)**2, 0, cos(x*pi)**2]
+    return [sin(x*pi/2)**2, 0, cos(x*pi/2)**2]
 
 def color3(x):
     x = (3*x + .5) % 3
@@ -36,7 +39,7 @@ def color_switch(x):
 
 
 
-img_size = 500
+img_size = 4000
 
 '''
 for i in range(1, 18):
@@ -48,27 +51,33 @@ for i in range(1, 18):
 
 #img = calculate(koch_curve(), img_size, 8, color_sin, init_rot=[img_size*.3, -img_size*.3])
 
+#img = calculate(peano_curve, img_size, 10, color_sin_small, init_rot=[0, -img_size*.45])
 
-
-img = calculate(sierpinski_triangle(), img_size, 11, color3, init_rot=[0, -img_size*.45], init_loc=[img_size//2, 2*img_size//3])
-
-'''
-img = calculate(sierpinski_carpet(), 800, 6, color_lin, init_rot=[0, -3**6])
+img = calculate(minkowski_curve, img_size, 8, color_sin, init_rot=[0, -img_size*.2])
+imsave("frac.png", img)
 '''
 plt.imshow(img, interpolation='None')
 plt.show()
+'''
+'''
+img = calculate(sierpinski_triangle(), img_size, 11, color3, init_rot=[0, -img_size*.45], init_loc=[img_size//2, 2*img_size//3])
+
+
+img = calculate(sierpinski_carpet(), 800, 6, color_lin, init_rot=[0, -3**6])
+
 
 '''
-n = 1000
-begin = 375
-end = 415
+'''
+n = 128
+begin = 0
+end = n
 for i in range(begin, end):
     
     t = i/(n-1)
-    alpha = t * 2*pi + (1-t) * 0
+    alpha = t * pi + (1-t) * 0
     
-    curve = levy_curve(alpha, 2)
-    img = calculate(curve, img_size, 17, color_lin, size=img_size/3.3)
+    curve = levy_curve(alpha, 16)
+    img = calculate(curve, img_size, 4, color_sin, size=img_size/3.3)
     print('iteration', i)
 
     imsave("frames/{}.png".format(i), img)
