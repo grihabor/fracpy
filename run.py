@@ -39,7 +39,7 @@ def color_switch(x):
 
 
 
-img_size = 4000
+img_size = 700
 
 '''
 for i in range(1, 18):
@@ -53,12 +53,20 @@ for i in range(1, 18):
 
 #img = calculate(peano_curve, img_size, 10, color_sin_small, init_rot=[0, -img_size*.45])
 
-img = calculate(minkowski_curve, img_size, 8, color_sin, init_rot=[0, -img_size*.2])
+img = calculate(minkowski_curve, img_size, 5, color_sin, init_rot=[0, -img_size*.2])
+
 imsave("frac.png", img)
+
+
+
+
+
+
 '''
 plt.imshow(img, interpolation='None')
 plt.show()
 '''
+
 '''
 img = calculate(sierpinski_triangle(), img_size, 11, color3, init_rot=[0, -img_size*.45], init_loc=[img_size//2, 2*img_size//3])
 
