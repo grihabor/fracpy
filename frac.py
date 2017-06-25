@@ -8,16 +8,22 @@ one point is represented by location and rotation vectors
 
 def point(loc, rot):
     return np.array([loc, rot])
+
+
 def loc(p):
     return p[0,:]
+
+
 def rot(p):
     return p[1,:]
+
 
 #vector + angle -> vector
 def rotate(v, angle):
     return np.array([v[0] * cos(angle) + v[1] * sin(angle),
                     -v[0] * sin(angle) + v[1] * cos(angle)])
                             
+
 
 class koch_curve:                    
     def __call__(self, p):
@@ -30,7 +36,8 @@ class koch_curve:
         t = rotate(rot(p), -pi/2)
         yield point(loc(p) + t, rot(p)/3)        
         raise StopIteration
-    
+
+
 class sierpinski_triangle:
     def __call__(self, p):
         v1 = rot(p)/2
@@ -40,6 +47,7 @@ class sierpinski_triangle:
         yield point(loc(p) + v2, v1)
         yield point(loc(p) + v3, v2)
         raise StopIteration
+
 
 class sierpinski_carpet:
     def __call__(self, p):
@@ -54,6 +62,7 @@ class sierpinski_carpet:
 
         raise StopIteration
 
+
 class dragon:
     def __call__(self, p):    
         k = sqrt(2)/2
@@ -63,6 +72,7 @@ class dragon:
         yield point(loc(p) + t2, t2)
         raise StopIteration
 
+
 def peano_curve(p):    
     t1 = rot(p)/2
     t2 = rotate(t1, pi/2)
@@ -71,6 +81,7 @@ def peano_curve(p):
     yield point(loc(p)+t1+t2, t1)
     yield point(loc(p)-t1+t2, t2)
     raise StopIteration
+
 
 def minkowski_curve(p):
     t1 = rot(p)/2
@@ -101,7 +112,7 @@ class levy_curve:
         raise StopIteration
 
 
-def calculate(gen_func, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
+def calculate(*, gen_func, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
     '''
     gen_func        - point generator
     img_size        - output image size
