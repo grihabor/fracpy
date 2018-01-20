@@ -1,6 +1,8 @@
-import frac
+import fracpy
 import colors
 from skimage.io import imsave
+
+import fractals
 
 DIR_OUTPUT = 'output'
 
@@ -9,8 +11,8 @@ img_size = 700
 
 def main():
     for i in range(1, 18):
-        img = frac.calculate(
-            gen_func=frac.dragon(),
+        img = fracpy.calculate(
+            gen_func=fractals.dragon(),
             img_size=img_size,
             n_iterations=i,
             color=colors.linear(

@@ -20,7 +20,7 @@ setup(
         'numpy',
         'scikit-image',
     ],
-    ext_modules=cythonize('frac.pyx'),
+    ext_modules=cythonize('fracpy.pyx'),
     version='0.0.1',
     description='Fractal library',
     long_description=_get_readme(),
