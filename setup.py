@@ -15,7 +15,10 @@ setup(
     author='Borodin Gregory',
     author_email='grihabor@mail.ru',
     license='MIT',
-    requires=[],
+    install_requires=[
+        'numpy',
+        'scikit-image',
+    ],
     version='0.0.1',
     description='Fractal library',
     long_description=_get_readme(),
