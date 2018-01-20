@@ -1,7 +1,5 @@
-import frac
+from fracpy import frac, color
 from skimage.io import imsave
-import color
-from math import cos, sin, pi
 
 DIR_OUTPUT = 'output'
 
