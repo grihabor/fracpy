@@ -22,9 +22,9 @@ setup(
         'scikit-image',
     ],
     ext_modules=cythonize([
-        Extension('fracpy', ['fracpy/fracpy.pyx',
-                             'fracpy/fractals.pyx',
-                             'fracpy/point.pyx']),
+        Extension('fracpy.fracpy', ['fracpy/fracpy.pyx']),
+        Extension('fracpy.fractals', ['fracpy/fractals.pyx']),
+        Extension('fracpy.point', ['fracpy/point.pyx']),
     ]),
     packages=["fracpy"],
     version='0.0.1',
