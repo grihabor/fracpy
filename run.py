@@ -1,5 +1,11 @@
-from fracpy import frac, color
+import os
+import shutil
+
+import fracpy
+import colors
 from skimage.io import imsave
+
+import fractals
 
 DIR_OUTPUT = 'output'
 
@@ -7,17 +13,21 @@ img_size = 700
 
 
 def main():
+    for filename in os.listdir(DIR_OUTPUT):
+        path = os.path.join(DIR_OUTPUT, filename)
+        os.remove(path)
+
     for i in range(1, 18):
-        img = frac.calculate(
-            gen_func=frac.dragon(),
+        img = fracpy.calculate(
+            fractal=fractals.dragon,
             img_size=img_size,
             n_iterations=i,
-            color=color.linear(
-                color_from=color.SKY,
-                color_to=color.PINKY,
+            color=colors.linear(
+                color_from=colors.SKY,
+                color_to=colors.PINKY,
                 zigzag=3
             ),
-            init_rot=[0, -img_size * .25])
+        )
         imsave("{}/{}.png".format(DIR_OUTPUT, i), img)
 
 
