@@ -8,28 +8,28 @@ cdef struct Pair:
     float y
 
 
-cdef float[2] multiply_by_scalar(float arr[2], float val):
-    cdef float result[2]
-    result[0] = arr[0] * val
-    result[1] = arr[1] * val
+cdef Pair multiply_by_scalar(Pair arr, float val):
+    cdef Pair result
+    result.x = arr.x * val
+    result.y = arr.y * val
     return result
 
-cdef float[2] divide_by_scalar(float arr[2], float val):
-    cdef float result[2]
-    result[0] = arr[0] / val
-    result[1] = arr[1] / val
+cdef Pair divide_by_scalar(Pair arr, float val):
+    cdef Pair result
+    result.x = arr.x / val
+    result.y = arr.y / val
     return result
 
-cdef float[2] negative(float arr[2]):
-    cdef float result[2]
-    result[0] = -arr[0]
-    result[1] = -arr[1]
+cdef Pair negative(Pair arr):
+    cdef Pair result
+    result.x = -arr.x
+    result.y = -arr.y
     return result
 
-cdef float[2] add_arrays(float arr1[2], float arr2[2]):
-    cdef float result[2]
-    result[0] = arr1[0] + arr2[0]
-    result[1] = arr1[1] + arr2[1]
+cdef Pair add_arrays(Pair arr1, Pair arr2):
+    cdef Pair result
+    result.x = arr1.x + arr2.x
+    result.y = arr1.y + arr2.y
     return result
 
 
