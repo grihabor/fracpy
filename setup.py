@@ -1,5 +1,6 @@
 from setuptools import setup
 import os
+from Cython.Build import cythonize
 
 _ROOT = os.path.abspath(os.path.join(__file__, os.pardir))
 
@@ -19,6 +20,7 @@ setup(
         'numpy',
         'scikit-image',
     ],
+    ext_modules=cythonize('frac.pyx'),
     version='0.0.1',
     description='Fractal library',
     long_description=_get_readme(),

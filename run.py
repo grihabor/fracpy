@@ -1,4 +1,5 @@
-from fracpy import frac, color
+import frac
+import colors
 from skimage.io import imsave
 
 DIR_OUTPUT = 'output'
@@ -12,9 +13,9 @@ def main():
             gen_func=frac.dragon(),
             img_size=img_size,
             n_iterations=i,
-            color=color.linear(
-                color_from=color.SKY,
-                color_to=color.PINKY,
+            color=colors.linear(
+                color_from=colors.SKY,
+                color_to=colors.PINKY,
                 zigzag=3
             ),
             init_rot=[0, -img_size * .25])

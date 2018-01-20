@@ -7,9 +7,12 @@ RUN pip3 install --no-cache-dir \
         numpy \
         scikit-image
 
+RUN pip3 install cython
+
 WORKDIR /project
 
 ADD . .
-RUN pip3 install .
+RUN python3 setup.py build_ext --inplace
+
 
 CMD ["python3", "run.py"]
