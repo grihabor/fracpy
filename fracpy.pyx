@@ -14,10 +14,9 @@ cdef Point tuple_to_point(item):
     point.rotation.y = item['ry']
     return point
 
-ctypedef Point(*Fractal)(Point)
 
 def calculate(*,
-              Fractal fractal,
+              fractal,
               int img_size,
               int n_iterations,
               color,
@@ -73,8 +72,6 @@ def calculate(*,
             point = tuple_to_point(item)
             points = fractal(point)
 
-            (point, points)
-
             for k in range(points.shape[0]):
                 new_point_buffer[j, k] = point_to_tuple(points[k])
 
@@ -86,8 +83,7 @@ def calculate(*,
         item = point_buffer[i]
         x = item['px']
         y = item['py']
-        img[y, x, 0] = 1.
-        img[y, x, 1] = 1.
-        img[y, x, 2] = 1.
+        color_value = color(i / total)
+        img[y, x, :] = color_value
 
     return img

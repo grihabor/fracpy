@@ -9,7 +9,7 @@ import fractals
 
 DIR_OUTPUT = 'output'
 
-img_size = 700
+img_size = 1500
 
 
 def main():
@@ -17,11 +17,12 @@ def main():
         path = os.path.join(DIR_OUTPUT, filename)
         os.remove(path)
 
-    for i in range(1, 18):
+    for i in range(1, 20):
         img = fracpy.calculate(
             fractal=fractals.dragon,
             img_size=img_size,
             n_iterations=i,
+            size=400,
             color=colors.linear(
                 color_from=colors.SKY,
                 color_to=colors.PINKY,
