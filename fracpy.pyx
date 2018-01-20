@@ -1,27 +1,9 @@
 import numpy as np
-from math import sin, cos
-
-
-def point(loc, rot):
-    return np.array([loc, rot])
-
-
-def loc(p):
-    return p[0, :]
-
-
-def rot(p):
-    return p[1, :]
-
-
-# vector + angle -> vector
-def rotate(v, angle):
-    return np.array([v[0] * cos(angle) + v[1] * sin(angle),
-                     -v[0] * sin(angle) + v[1] * cos(angle)])
+from point cimport create_point, Point, rotate
 
 
 
-def calculate(*, gen_func, img_size, n_iterations, color, size=100, alpha=0, init_loc=None, init_rot=None):
+def calculate(*, apply_tree, int img_size, n_iterations, color, float size=100, float alpha=0):
     '''
     gen_func        - point generator
     img_size        - output image size
@@ -31,47 +13,47 @@ def calculate(*, gen_func, img_size, n_iterations, color, size=100, alpha=0, ini
     '''
 
 
-    if init_loc is None:
-        init_loc = [img_size//2, img_size//2]
-    if init_rot is None:
-        init_rot = rotate([0, -size], alpha)
+    cdef float up[2]
+    cdef Point initial_point
+    cdef float rotation[2]
 
-    #starting point
-    init=point(init_loc, init_rot)
-    #total number of points
-    total = sum(1 for i in gen_func(init)) ** n_iterations
+    up[0] = 0
+    up[1] = size
+    rotation = rotate(up, alpha)
+
+    initial_point = create_point(
+        [img_size / 2, img_size / 2],
+        rotation
+    )
+
+    tree_counter = apply_tree(initial_point).shape[0]
+
+    # total number of points
+    total = tree_counter ** n_iterations
 
     img = np.zeros((img_size,img_size,3), np.float)
 
-    #list of iterators
+    # list of iterators
     it_list = [None]*n_iterations
 
-    #flag if we need a new generator
-    add_gen = True
-    p = init
-    i = 0
-    count = 0
-    while i >= 0:
-        if add_gen:
-            it_list[i] = iter(gen_func(p))
-        add_gen = True
+    point_buffer = np.array([[initial_point]])
 
-        try:
-            p = next(it_list[i])
-        except StopIteration:
-            i -= 1
-            add_gen = False
-            continue
-        '''
-        print('iteration', i)
-        print('point', p)
-        '''
+    cdef unsigned int i
+    cdef unsigned int j
+    cdef Point point
 
-        if i == n_iterations - 1:
-            img[int(loc(p)[1]+.5), int(loc(p)[0]+.5)] = np.array(color(count/total))
-            count += 1
-            add_gen = False
-        else:
-            i += 1
+    for i in range(10):
+        point_buffer.reshape((-1,))
+        new_point_buffer = np.zeros((point_buffer.shape[0], tree_counter), dtype=np.float32)
+
+        for j, point in enumerate(point_buffer):
+            new_point_buffer[i, :] = apply_tree(point)
+
+        point_buffer = new_point_buffer
+
+    point_buffer.reshape((-1,))
+    for point in point_buffer:
+        img[point.position] = [1., 1., 1.]
+
     #print(n_iterations, count, total)
     return img

@@ -12,7 +12,7 @@ img_size = 700
 def main():
     for i in range(1, 18):
         img = fracpy.calculate(
-            gen_func=fractals.dragon(),
+            apply_tree=fractals.dragon(),
             img_size=img_size,
             n_iterations=i,
             color=colors.linear(

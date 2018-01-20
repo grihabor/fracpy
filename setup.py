@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, Extension
 import os
 from Cython.Build import cythonize
 
@@ -20,7 +20,11 @@ setup(
         'numpy',
         'scikit-image',
     ],
-    ext_modules=cythonize('fracpy.pyx'),
+    ext_modules=cythonize([
+        Extension('fracpy', ['fracpy.pyx']),
+        Extension('fractals', ['fractals.pyx']),
+        Extension('point', ['point.pyx', 'point.pxd']),
+    ], gdb_debug=True),
     version='0.0.1',
     description='Fractal library',
     long_description=_get_readme(),
