@@ -1,11 +1,7 @@
 import numpy as np
 from libc.math cimport pi, sqrt
-from point cimport create_point, Point, rotate
+from point cimport create_point, Point, rotate, Pair
 
-
-cdef struct Pair:
-    float x
-    float y
 
 
 cdef Pair multiply_by_scalar(Pair arr, float val):
@@ -38,10 +34,10 @@ cdef koch_curve(Point p):
     cdef float s = pi / 2
     cdef float k = pi / 3
 
-    cdef float t1[2]
-    cdef float t2[2]
-    cdef float t3[2]
-    cdef float t4[2]
+    cdef Pair t1
+    cdef Pair t2
+    cdef Pair t3
+    cdef Pair t4
 
     t1 = rotate(p.rotation, s)
     t2 = rotate(p.rotation, s - k)
@@ -68,10 +64,13 @@ cdef koch_curve(Point p):
     )
 
 cdef sierpinski_triangle(Point p):
-    cdef float v1[2]
-    cdef float v2[2]
-    cdef float v3[2]
-    cdef float k = 2 * pi / 3
+    cdef:
+        Pair v1
+        Pair v2
+        Pair v3
+
+        float k = 2 * pi / 3
+
     v1 = divide_by_scalar(p.rotation, 2)
     v2 = rotate(v1, k)
     v3 = rotate(v1, -k)
@@ -83,10 +82,12 @@ cdef sierpinski_triangle(Point p):
 
 
 cdef sierpinski_carpet(Point p):
-    cdef float new_rot[2]
-    cdef float t1[2]
-    cdef float t2[2]
-    cdef unsigned int i
+    cdef:
+        Pair new_rot
+        Pair t1
+        Pair t2
+
+        unsigned int i
 
     new_rot = divide_by_scalar(p.rotation, 3)
     t1 = new_rot
@@ -105,13 +106,13 @@ cdef sierpinski_carpet(Point p):
     return result
 
 
-cdef dragon(Point p):
+cpdef dragon(Point p):
     cdef:
         float k = sqrt(2) / 2
         float q = - pi / 4
 
-        float t1[2]
-        float t2[2]
+        Pair t1
+        Pair t2
 
     t1 = multiply_by_scalar(rotate(p.rotation, q), k)
     t2 = multiply_by_scalar(rotate(p.rotation, 3 * q), k)
@@ -123,8 +124,9 @@ cdef dragon(Point p):
 
 
 cdef peano_curve(Point p):
-    cdef float t1[2]
-    cdef float t2[2]
+    cdef:
+        Pair t1
+        Pair t2
 
     t1 = divide_by_scalar(p.rotation, 2)
     t2 = rotate(t1, pi / 2)
@@ -150,8 +152,9 @@ cdef peano_curve(Point p):
 
 
 cdef minkowski_curve(Point *p):
-    cdef float t1[2]
-    cdef float t2[2]
+    cdef:
+        Pair t1
+        Pair t2
 
     t1 = divide_by_scalar(p.rotation, 2)
     t2 = rotate(t1, pi / 2)

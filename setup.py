@@ -1,3 +1,4 @@
+import numpy
 from setuptools import setup, Extension
 import os
 from Cython.Build import cythonize
@@ -23,8 +24,8 @@ setup(
     ext_modules=cythonize([
         Extension('fracpy', ['fracpy.pyx']),
         Extension('fractals', ['fractals.pyx']),
-        Extension('point', ['point.pyx', 'point.pxd']),
-    ], gdb_debug=True),
+        Extension('point', ['point.pyx']),
+    ]),
     version='0.0.1',
     description='Fractal library',
     long_description=_get_readme(),

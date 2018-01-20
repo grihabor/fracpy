@@ -1,9 +1,28 @@
 import numpy as np
-from point cimport create_point, Point, rotate
+from point cimport create_point, Point, rotate, Pair
 
 
+cdef point_to_tuple(Point p):
+    return (p.position.x, p.position.y, p.rotation.x, p.rotation.y)
 
-def calculate(*, apply_tree, int img_size, n_iterations, color, float size=100, float alpha=0):
+
+cdef Point tuple_to_point(item):
+    cdef Point point
+    point.position.x = item['px']
+    point.position.y = item['py']
+    point.rotation.x = item['rx']
+    point.rotation.y = item['ry']
+    return point
+
+ctypedef Point(*Fractal)(Point)
+
+def calculate(*,
+              Fractal fractal,
+              int img_size,
+              int n_iterations,
+              color,
+              float size=100,
+              float alpha=0):
     '''
     gen_func        - point generator
     img_size        - output image size
@@ -13,47 +32,62 @@ def calculate(*, apply_tree, int img_size, n_iterations, color, float size=100, 
     '''
 
 
-    cdef float up[2]
-    cdef Point initial_point
-    cdef float rotation[2]
+    cdef Pair up
+    cdef Pair rotation
+    cdef Pair position
 
-    up[0] = 0
-    up[1] = size
+    up.x = 0
+    up.y = size
     rotation = rotate(up, alpha)
 
-    initial_point = create_point(
-        [img_size / 2, img_size / 2],
-        rotation
-    )
+    position.x = img_size / 2
+    position.y = img_size / 2
 
-    tree_counter = apply_tree(initial_point).shape[0]
+    cdef Point initial_point = create_point(position, rotation)
+
+
+    tree_counter = fractal(initial_point).shape[0]
 
     # total number of points
     total = tree_counter ** n_iterations
 
-    img = np.zeros((img_size,img_size,3), np.float)
 
-    # list of iterators
-    it_list = [None]*n_iterations
+    point_type = [('px', 'f4'), ('py', 'f4'), ('rx', 'f4'), ('ry', 'f4')]
+    point_buffer = np.array([[
+        point_to_tuple(initial_point)
+    ]], dtype=point_type)
 
-    point_buffer = np.array([[initial_point]])
+    new_point_buffer = np.array([[]], dtype=point_type)
+    img = np.zeros((img_size, img_size, 3), dtype=np.float)
 
-    cdef unsigned int i
-    cdef unsigned int j
+    cdef int i, j, k
+    cdef int x, y
     cdef Point point
 
-    for i in range(10):
-        point_buffer.reshape((-1,))
-        new_point_buffer = np.zeros((point_buffer.shape[0], tree_counter), dtype=np.float32)
+    for i in range(n_iterations):
+        point_buffer = point_buffer.reshape((-1,))
+        new_point_buffer = np.zeros((point_buffer.shape[0], tree_counter), dtype=point_type)
 
-        for j, point in enumerate(point_buffer):
-            new_point_buffer[i, :] = apply_tree(point)
+        for j in range(point_buffer.shape[0]):
+            item = point_buffer[j]
+            point = tuple_to_point(item)
+            points = fractal(point)
+
+            (point, points)
+
+            for k in range(points.shape[0]):
+                new_point_buffer[j, k] = point_to_tuple(points[k])
 
         point_buffer = new_point_buffer
 
-    point_buffer.reshape((-1,))
-    for point in point_buffer:
-        img[point.position] = [1., 1., 1.]
+    point_buffer = point_buffer.reshape((-1,))
 
-    #print(n_iterations, count, total)
+    for i in range(point_buffer.shape[0]):
+        item = point_buffer[i]
+        x = item['px']
+        y = item['py']
+        img[y, x, 0] = 1.
+        img[y, x, 1] = 1.
+        img[y, x, 2] = 1.
+
     return img
