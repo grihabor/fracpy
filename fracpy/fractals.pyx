@@ -154,7 +154,7 @@ cpdef peano_curve(Point p):
     ])
 
 
-cpdef minkowski_curve(Point *p):
+cpdef minkowski_curve(Point p):
     cdef:
         Pair t1
         Pair t2
