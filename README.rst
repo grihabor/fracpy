@@ -2,7 +2,7 @@
 fracpy
 ======
 
-|travis-build| |coverage|
+|travis-build| |coverage| |pypi-version| |license| |pypi-python-versions|
 
 Fractal library
 
