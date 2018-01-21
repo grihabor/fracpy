@@ -21,6 +21,13 @@ setup(
         'numpy',
         'scikit-image',
     ],
+    setup_requires=[
+        'pytest-runner',        
+    ],         
+    tests_require=[             
+        'pytest',        
+        'pytest-cov',         
+    ],
     ext_modules=cythonize([
         Extension('fracpy.fracpy', ['fracpy/fracpy.pyx']),
         Extension('fracpy.fractals', ['fracpy/fractals.pyx']),
