@@ -1,4 +1,3 @@
 def test_dummy():
-    import fracpy
-    pass
-    
+    from fracpy import fractals
+    print(fractals.dragon)
