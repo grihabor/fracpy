@@ -20,3 +20,6 @@ Fractal library
 
 .. |pypi-python-versions| image:: https://img.shields.io/pypi/pyversions/fracpy.svg
    :target: https://pypi.python.org/pypi/fracpy
+
+.. |docs-status| image:: https://readthedocs.org/projects/fracpy/badge/?version=latest
+   :target: https://fracpy.readthedocs.io/en/latest/?badge=latest 
