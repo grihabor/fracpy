@@ -13,4 +13,11 @@ script:
 
 after_success:
     - coveralls
+
+deploy: 
+    provider: pypi 
+    user: grihabor
+    password: $PYPI_PASSWORD
+    on: 
+        branch: release
     
