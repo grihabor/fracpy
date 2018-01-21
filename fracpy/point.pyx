@@ -1,3 +1,6 @@
+# cython: linetrace=True
+# distutils: define_macros=CYTHON_TRACE=1 
+
 from libc.math cimport sin, cos
 
 cdef Point create_point(Pair position, Pair rotation):
