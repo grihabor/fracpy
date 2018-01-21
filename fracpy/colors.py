@@ -55,6 +55,7 @@ def color_sin(x):
     return [sin(x * pi / 2) ** 2, 0, cos(x * pi / 2) ** 2]
 """
 
+
 def color3(x):
     x = (3 * x + .5) % 3
     if x < 1:
@@ -65,17 +66,3 @@ def color3(x):
     else:
         x -= 2
         return [0, 1 - x, x]
-
-
-'''
-switch = -1
-def color_switch(x):
-    global switch
-    switch = (switch + 1) % 3
-    if switch == 0:
-        return [0, 0, 1]
-    elif switch == 1:
-        return [0, 1, 0]
-    elif switch == 2:
-        return [1, 0, 0]
-'''

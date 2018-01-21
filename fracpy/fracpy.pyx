@@ -20,18 +20,36 @@ cdef Point tuple_to_point(item):
 
 def calculate(*,
               fractal,
-              int img_size,
+              tuple canvas_shape,
               int n_iterations,
               color,
               float size=100,
-              float alpha=0):
-    '''
-    gen_func        - point generator
-    img_size        - output image size
-    n_iterations    - number of iterations
-    color           - function, which takes point number from (0, N**n_iterations)
-                        where N - generator number of points
-    '''
+              float angle=0):
+    """
+
+    Attributes
+    ----------
+    fractal
+        Fractal function
+    canvas_shape: tuple of int
+        First 2 dimensions of the output numpy array
+    n_iterations: int
+        Number of fractal iterations
+    color
+        Color function
+
+        It should take a float from [0, 1] and return
+        a numpy array of shape=(3,) and dtype=np.float32
+    size: float
+        Size of the fractal
+    angle: float
+        Rotation of the fractal
+
+    Returns
+    -------
+    
+    """
+
 
 
     cdef Pair up
@@ -40,10 +58,10 @@ def calculate(*,
 
     up.x = 0
     up.y = size
-    rotation = rotate(up, alpha)
+    rotation = rotate(up, angle)
 
-    position.x = img_size / 2
-    position.y = img_size / 2
+    position.x = canvas_shape[0] / 2
+    position.y = canvas_shape[1] / 2
 
     cdef Point initial_point = create_point(position, rotation)
 

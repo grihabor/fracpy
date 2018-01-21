@@ -20,7 +20,7 @@ def main():
     for i in range(1, 20):
         img = fracpy.calculate(
             fractal=fractals.dragon,
-            img_size=img_size,
+            canvas_shape=img_size,
             n_iterations=i,
             size=400,
             color=colors.linear(
