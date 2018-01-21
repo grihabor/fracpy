@@ -1,9 +1,9 @@
 import numpy as np
 
 
-GREEN = np.array([0, 255, 0])
-RED = np.array([255, 0, 0])
-BLUE = np.array([0, 0, 255])
+GREEN = np.array([0., 1., 0.])
+RED = np.array([1., 0., 0.])
+BLUE = np.array([0., 0., 1.])
 
 SKY = np.array([179, 225, 242], dtype=np.float32)
 PINKY = np.array([255, 170, 221], dtype=np.float32)

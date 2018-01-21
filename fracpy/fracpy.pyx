@@ -78,7 +78,7 @@ def calculate(*,
     ]], dtype=point_type)
 
     new_point_buffer = np.array([[]], dtype=point_type)
-    img = np.zeros((img_size, img_size, 3), dtype=np.float)
+    img = np.zeros(canvas_shape + (3,), dtype=np.float)
 
     cdef int i, j, k
     cdef int x, y

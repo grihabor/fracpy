@@ -20,12 +20,12 @@ def main():
     for i in range(1, 20):
         img = fracpy.calculate(
             fractal=fractals.dragon,
-            canvas_shape=img_size,
+            canvas_shape=(img_size, img_size),
             n_iterations=i,
             size=400,
             color=colors.linear(
-                color_from=colors.SKY,
-                color_to=colors.PINKY,
+                color_from=colors.RED,
+                color_to=colors.GREEN,
                 zigzag=3
             ),
         )
