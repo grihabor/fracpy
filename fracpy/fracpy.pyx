@@ -1,3 +1,6 @@
+# cython: linetrace=True
+# distutils: define_macros=CYTHON_TRACE=1 
+
 import numpy as np
 from point cimport create_point, Point, rotate, Pair
 

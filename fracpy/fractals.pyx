@@ -1,28 +1,31 @@
+# cython: linetrace=True
+# distutils: define_macros=CYTHON_TRACE=1 
+
 import numpy as np
 from libc.math cimport pi, sqrt
 from point cimport create_point, Point, rotate, Pair
 
 
 
-cdef Pair multiply_by_scalar(Pair arr, float val):
+cpdef Pair multiply_by_scalar(Pair arr, float val):
     cdef Pair result
     result.x = arr.x * val
     result.y = arr.y * val
     return result
 
-cdef Pair divide_by_scalar(Pair arr, float val):
+cpdef Pair divide_by_scalar(Pair arr, float val):
     cdef Pair result
     result.x = arr.x / val
     result.y = arr.y / val
     return result
 
-cdef Pair negative(Pair arr):
+cpdef Pair negative(Pair arr):
     cdef Pair result
     result.x = -arr.x
     result.y = -arr.y
     return result
 
-cdef Pair add_arrays(Pair arr1, Pair arr2):
+cpdef Pair add_arrays(Pair arr1, Pair arr2):
     cdef Pair result
     result.x = arr1.x + arr2.x
     result.y = arr1.y + arr2.y
@@ -30,7 +33,7 @@ cdef Pair add_arrays(Pair arr1, Pair arr2):
 
 
 
-cdef koch_curve(Point p):
+cpdef koch_curve(Point p):
     cdef float s = pi / 2
     cdef float k = pi / 3
 
@@ -63,7 +66,7 @@ cdef koch_curve(Point p):
         ),
     )
 
-cdef sierpinski_triangle(Point p):
+cpdef sierpinski_triangle(Point p):
     cdef:
         Pair v1
         Pair v2
@@ -81,7 +84,7 @@ cdef sierpinski_triangle(Point p):
     ])
 
 
-cdef sierpinski_carpet(Point p):
+cpdef sierpinski_carpet(Point p):
     cdef:
         Pair new_rot
         Pair t1
@@ -123,7 +126,7 @@ cpdef dragon(Point p):
 
 
 
-cdef peano_curve(Point p):
+cpdef peano_curve(Point p):
     cdef:
         Pair t1
         Pair t2
@@ -151,7 +154,7 @@ cdef peano_curve(Point p):
     ])
 
 
-cdef minkowski_curve(Point *p):
+cpdef minkowski_curve(Point *p):
     cdef:
         Pair t1
         Pair t2
