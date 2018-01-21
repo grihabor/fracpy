@@ -4,6 +4,7 @@ python:
     - "3.6"
     
 install:
+    - pip3 install cython numpy
     - python3 setup.py install
 
 script:
