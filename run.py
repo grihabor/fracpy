@@ -2,7 +2,7 @@ import os
 
 import fracpy
 import fracpy.fractals as fractals
-import colors
+import fracpy.colors as colors
 from skimage.io import imsave
 
 from fracpy import fractals
