@@ -1,11 +1,11 @@
 import os
-import shutil
 
 import fracpy
+import fracpy.fractals as fractals
 import colors
 from skimage.io import imsave
 
-import fractals
+from fracpy import fractals
 
 DIR_OUTPUT = 'output'
 
